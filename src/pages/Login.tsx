@@ -1,15 +1,15 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -29,6 +29,7 @@ const userTypes = [
 
 const Login = () => {
   const [selectedUserType, setSelectedUserType] = useState("");
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,7 +42,20 @@ const Login = () => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
-    // Here you would typically authenticate the user
+    // Store user type in localStorage for the demo
+    // In a real app, this would be part of the authentication flow
+    localStorage.setItem("userType", values.userType);
+    
+    // Show success toast
+    toast({
+      title: "Login successful",
+      description: "Redirecting to your dashboard...",
+    });
+
+    // Redirect to dashboard
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1000);
   };
 
   return (

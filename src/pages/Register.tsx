@@ -46,7 +46,7 @@ const Register = () => {
       password: "",
       confirmPassword: "",
       userType: "",
-      termsAccepted: false,
+      termsAccepted: false as unknown as true, // Fixed the type error
     },
   });
 
